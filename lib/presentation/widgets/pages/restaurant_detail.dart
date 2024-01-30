@@ -77,7 +77,7 @@ class RestaurantDetailPage extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: List.generate(
-                        restaurant.menus.foods.length,
+                        restaurant.menus.drinks.length,
                         (i) => _buildRestaurantMenuCard(restaurant,
                             MenuItem(name: restaurant.menus.drinks[i].name))),
                   ),
