@@ -58,8 +58,12 @@ Widget _buildRestaurantItem(BuildContext context, Restaurant restaurant) {
       borderRadius: const BorderRadius.all(Radius.circular(4.0)),
       child: Image.network(
         restaurant.pictureId,
+        width: 100.0,
         fit: BoxFit.cover,
-        errorBuilder: (ctx, error, _) => const Center(child: Icon(Icons.error)),
+        errorBuilder: (ctx, error, _) => const SizedBox(
+          width: 100,
+          child: Icon(Icons.error),
+        ),
       ),
     ),
     title: Text(
