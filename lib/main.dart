@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/domain/models/restaurant.dart';
-import 'package:restaurant_app/presentation/widgets/pages/restaurant_detail.dart';
-import 'package:restaurant_app/presentation/widgets/restaurant_list_page.dart';
+import 'package:restaurant_app/data/model/response/restaurant_detail.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:restaurant_app/presentation/pages/restaurant_detail/restaurant_detail_page.dart';
+import 'package:restaurant_app/presentation/pages/restaurant_list/restaurant_list_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       routes: {
         RestaurantListPage.routeName: (context) => const RestaurantListPage(),
         RestaurantDetailPage.routeName: (context) => RestaurantDetailPage(
-          restaurant: ModalRoute.of(context)?.settings.arguments as Restaurant,
+          restaurantId: ModalRoute.of(context)?.settings.arguments as String,
         ),
       },
     );
