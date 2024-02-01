@@ -1,19 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/data/api/api_service.dart';
+import 'package:provider/provider.dart';
 import 'package:restaurant_app/data/model/response/menu.dart';
 import 'package:restaurant_app/data/model/response/restaurant_detail.dart';
-import 'package:restaurant_app/presentation/pages/restaurant_detail/restaurant_detail_page.dart';
 import 'package:restaurant_app/presentation/widgets/platform_widget.dart';
+import 'package:restaurant_app/provider/restaurant_detail_provider.dart';
 
-class RestaurantDetailState extends State<RestaurantDetailPage> {
-  late Future<RestaurantDetailResponse> _restaurantDetail;
+class RestaurantDetailPage extends StatelessWidget {
+  static const routeName = '/restaurant_detail';
 
-  @override
-  void initState() {
-    super.initState();
-    _restaurantDetail = ApiService().getRestaurantDetail(widget.restaurantId);
-  }
+  const RestaurantDetailPage({super.key});
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
@@ -43,37 +39,39 @@ class RestaurantDetailState extends State<RestaurantDetailPage> {
   }
 
   Widget _buildPage(BuildContext context) {
-    return FutureBuilder(
-        future: _restaurantDetail,
-        builder: (context, AsyncSnapshot<RestaurantDetailResponse> snapshot) {
-          var state = snapshot.connectionState;
+    return Consumer<RestaurantDetailProvider>(builder: (context, state, _) {
+      if (state.state == ResultState.loading) {
+        return const Center(child: CircularProgressIndicator());
+      }
 
-          if (state != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      if (state.state == ResultState.hasData) {
+        return _buildTemplate(state.result.restaurant);
+      }
 
-          if (snapshot.hasData) {
-            return _buildTemplate(snapshot.data!.restaurant);
-          }
+      if (state.state == ResultState.noData) {
+        return Center(
+          child: Text(state.message),
+        );
+      }
 
-          if (snapshot.hasError) {
-            return AlertDialog(
-              title: const Text('Error'),
-              content:
-                  const Text('An error occurred. Cannot connect to server'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.popAndPushNamed(context, RestaurantDetailPage.routeName);
-                  },
-                  child: const Text('Close'),
-                ),
-              ],
-            );
-          }
+      if (state.state == ResultState.error) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text('An error occurred. Cannot connect to server'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(
+                    context, RestaurantDetailPage.routeName);
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      }
 
-          return const Material(child: Text(''));
-        });
+      return const Material(child: Text(''));
+    });
   }
 
   Widget _buildTemplate(RestaurantDetail restaurant) {
@@ -182,8 +180,13 @@ class RestaurantDetailState extends State<RestaurantDetailPage> {
                     height: double.infinity,
                     fit: BoxFit.cover,
                     errorBuilder: (ctx, error, _) => const SizedBox(
-                      width: 100,
+                      width: double.infinity,
                       child: Icon(Icons.error),
+                    ),
+                    loadingBuilder: (context, child, loadingProgress) =>
+                        SizedBox(
+                      width: double.infinity,
+                      child: _loadingBuilder(context, child, loadingProgress),
                     ),
                   ),
                 )),
@@ -203,5 +206,21 @@ class RestaurantDetailState extends State<RestaurantDetailPage> {
                 ))
           ],
         ));
+  }
+
+  Widget _loadingBuilder(
+      BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+    if (loadingProgress == null) {
+      return child;
+    }
+
+    return Center(
+      child: CircularProgressIndicator(
+        value: loadingProgress.expectedTotalBytes != null
+            ? loadingProgress.cumulativeBytesLoaded /
+                (loadingProgress.expectedTotalBytes ?? 1)
+            : null,
+      ),
+    );
   }
 }

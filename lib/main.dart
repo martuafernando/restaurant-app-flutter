@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/data/model/response/restaurant_detail.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant_app/data/api/api_service.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:restaurant_app/presentation/pages/restaurant_detail/restaurant_detail_page.dart';
-import 'package:restaurant_app/presentation/pages/restaurant_list/restaurant_list_page.dart';
+import 'package:restaurant_app/presentation/pages/restaurant_detail_page.dart';
+import 'package:restaurant_app/presentation/pages/restaurant_list_page.dart';
+import 'package:restaurant_app/provider/restaurant_detail_provider.dart';
+import 'package:restaurant_app/provider/restaurant_list_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,13 +24,20 @@ class MyApp extends StatelessWidget {
       ),
       home: AnimatedSplashScreen(
         splash: 'assets/logo.png',
-        nextScreen: const RestaurantListPage(),
+        nextScreen: ChangeNotifierProvider<RestaurantListProvider>(
+          create: (_) => RestaurantListProvider(apiService: ApiService()),
+          child: const RestaurantListPage(),
+        ),
         splashTransition: SplashTransition.fadeTransition,
       ),
       routes: {
-        RestaurantListPage.routeName: (context) => const RestaurantListPage(),
-        RestaurantDetailPage.routeName: (context) => RestaurantDetailPage(
-          restaurantId: ModalRoute.of(context)?.settings.arguments as String,
+        RestaurantListPage.routeName: (context) => ChangeNotifierProvider<RestaurantListProvider>(
+          create: (_) => RestaurantListProvider(apiService: ApiService()),
+          child: const RestaurantListPage(),
+        ),
+        RestaurantDetailPage.routeName: (context) => ChangeNotifierProvider<RestaurantDetailProvider>(
+          create: (_) => RestaurantDetailProvider(apiService: ApiService(), restaurantId: ModalRoute.of(context)?.settings.arguments as String),
+          child: const RestaurantDetailPage(),
         ),
       },
     );

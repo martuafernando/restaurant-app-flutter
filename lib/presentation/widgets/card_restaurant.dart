@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/data/model/response/restaurant_list.dart';
-import 'package:restaurant_app/presentation/pages/restaurant_detail/restaurant_detail_page.dart';
+import 'package:restaurant_app/presentation/pages/restaurant_detail_page.dart';
 
 class CardRestaurant extends StatelessWidget {
   final RestaurantOverview restaurant;
@@ -21,6 +21,10 @@ class CardRestaurant extends StatelessWidget {
           errorBuilder: (ctx, error, _) => const SizedBox(
             width: 100,
             child: Icon(Icons.error),
+          ),
+          loadingBuilder: (context, child, loadingProgress) => SizedBox(
+            width: 100,
+            child: _loadingBuilder(context, child, loadingProgress),
           ),
         ),
       ),
@@ -48,9 +52,25 @@ class CardRestaurant extends StatelessWidget {
         ],
       ),
       onTap: () {
-      Navigator.pushNamed(context, RestaurantDetailPage.routeName,
-        arguments: restaurant.id);
-    },
+        Navigator.pushNamed(context, RestaurantDetailPage.routeName,
+            arguments: restaurant.id);
+      },
+    );
+  }
+
+  Widget _loadingBuilder(
+      BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+    if (loadingProgress == null) {
+      return child;
+    }
+
+    return Center(
+      child: CircularProgressIndicator(
+        value: loadingProgress.expectedTotalBytes != null
+            ? loadingProgress.cumulativeBytesLoaded /
+                (loadingProgress.expectedTotalBytes ?? 1)
+            : null,
+      ),
     );
   }
 }
