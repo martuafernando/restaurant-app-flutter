@@ -44,7 +44,7 @@ class RestaurantListPage extends StatelessWidget {
                 Navigator.popAndPushNamed(
                     context, RestaurantListPage.routeName);
               },
-              child: const Text('Close'),
+              child: const Text('Refresh'),
             ),
           ],
         );

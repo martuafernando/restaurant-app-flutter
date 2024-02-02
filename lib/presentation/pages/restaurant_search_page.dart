@@ -42,7 +42,7 @@ class RestaurantSearchPage extends StatelessWidget {
                 Navigator.popAndPushNamed(
                     context, RestaurantSearchPage.routeName);
               },
-              child: const Text('Close'),
+              child: const Text('Refresh'),
             ),
           ],
         );
@@ -67,7 +67,7 @@ class RestaurantSearchPage extends StatelessWidget {
         children: [
           Container(
               margin:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  const EdgeInsets.symmetric(horizontal: 16.0),
               child: Consumer<RestaurantSearchProvider>(
                   builder: (context, state, _) {
                 return TextField(
