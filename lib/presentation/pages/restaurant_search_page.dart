@@ -1,22 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app/presentation/pages/restaurant_search_page.dart';
 import 'package:restaurant_app/presentation/widgets/card_restaurant.dart';
 import 'package:restaurant_app/presentation/widgets/platform_widget.dart';
-import 'package:restaurant_app/provider/restaurant_list_provider.dart';
+import 'package:restaurant_app/provider/restaurant_search_provider.dart';
 
-class RestaurantListPage extends StatelessWidget {
-  const RestaurantListPage({super.key});
+class RestaurantSearchPage extends StatelessWidget {
+  const RestaurantSearchPage({super.key});
 
-  static const routeName = '/restaurant_list';
+  static const routeName = '/restaurant_search';
 
   Widget _buildList(BuildContext context) {
-    return Consumer<RestaurantListProvider>(builder: (context, state, _) {
+    return Consumer<RestaurantSearchProvider>(builder: (context, state, _) {
       if (state.state == ResultState.loading) {
         return const Center(child: CircularProgressIndicator());
       }
-
       if (state.state == ResultState.hasData) {
         return ListView.builder(
           shrinkWrap: true,
@@ -42,7 +40,7 @@ class RestaurantListPage extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Navigator.popAndPushNamed(
-                    context, RestaurantListPage.routeName);
+                    context, RestaurantSearchPage.routeName);
               },
               child: const Text('Close'),
             ),
@@ -57,20 +55,38 @@ class RestaurantListPage extends StatelessWidget {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Restaurant App'),
-        actions: [
+        title: const Text('Search'),
+        actions: const [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                Navigator.pushNamed(context, RestaurantSearchPage.routeName);
-              },
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Icon(Icons.search),
           ),
         ],
       ),
-      body: _buildList(context),
+      body: Column(
+        children: [
+          Container(
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              child: Consumer<RestaurantSearchProvider>(
+                  builder: (context, state, _) {
+                return TextField(
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 24.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(32.0),
+                      borderSide: const BorderSide(width: 1.0),
+                    ),
+                  ),
+                  onChanged: (query) => state.searchRestaurant(query),
+                );
+              })),
+          Expanded(
+            child: _buildList(context),
+          )
+        ],
+      ),
     );
   }
 
