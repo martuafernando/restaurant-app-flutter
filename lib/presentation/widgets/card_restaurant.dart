@@ -64,13 +64,8 @@ class CardRestaurant extends StatelessWidget {
       return child;
     }
 
-    return Center(
-      child: CircularProgressIndicator(
-        value: loadingProgress.expectedTotalBytes != null
-            ? loadingProgress.cumulativeBytesLoaded /
-                (loadingProgress.expectedTotalBytes ?? 1)
-            : null,
-      ),
+    return const Center(
+      child: CircularProgressIndicator(),
     );
   }
 }

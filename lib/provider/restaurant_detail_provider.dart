@@ -6,11 +6,8 @@ enum ResultState { loading, noData, hasData, error }
 
 class RestaurantDetailProvider extends ChangeNotifier {
   final ApiService apiService;
-  final String? restaurantId;
 
-  RestaurantDetailProvider({required this.apiService, required this.restaurantId}) {
-    _fetchDetailRestaurant(restaurantId);
-  }
+  RestaurantDetailProvider({required this.apiService});
 
   late RestaurantDetailResponse _restaurantDetail;
   late ResultState _state;
@@ -22,10 +19,9 @@ class RestaurantDetailProvider extends ChangeNotifier {
 
   ResultState get state => _state;
 
-  Future<dynamic> _fetchDetailRestaurant(String? restaurantId) async {
+  Future<dynamic> fetchDetailRestaurant(String? restaurantId) async {
     try {
       _state = ResultState.loading;
-      notifyListeners();
       
       if (restaurantId == null) {
         throw Exception('Cannot connect to server');
