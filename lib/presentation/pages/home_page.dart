@@ -1,10 +1,13 @@
 import 'dart:io';
 
 import 'package:restaurant_app/common/styles.dart';
+import 'package:restaurant_app/presentation/pages/restaurant_detail_page.dart';
 import 'package:restaurant_app/presentation/pages/restaurant_list_page.dart';
+import 'package:restaurant_app/presentation/pages/setting_page.dart';
 import 'package:restaurant_app/presentation/widgets/platform_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/utils/notification_helper.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home_page';
@@ -21,9 +24,12 @@ class _HomePageState extends State<HomePage> {
   static const String _favoriteText = 'Favorite';
   static const String _settingText = 'Setting';
 
+    final NotificationHelper _notificationHelper = NotificationHelper();
+
   final List<Widget> _listWidget = [
     const RestaurantListPage(),
     const RestaurantListPage(),
+    const SettingsPage(),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavBarItems = [
@@ -71,6 +77,19 @@ class _HomePageState extends State<HomePage> {
         return _listWidget[index];
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _notificationHelper
+        .configureSelectNotificationSubject(RestaurantDetailPage.routeName);
+  }
+
+  @override
+  void dispose() {
+    selectNotificationSubject.close();
+    super.dispose();
   }
 
   @override

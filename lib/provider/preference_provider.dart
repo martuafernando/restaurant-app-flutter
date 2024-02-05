@@ -9,14 +9,14 @@ class PreferencesProvider extends ChangeNotifier {
   }
 
   bool _isDailyReminderActive = false;
-  bool get isDailyNewsActive => _isDailyReminderActive;
+  bool get isDailyReminderActive => _isDailyReminderActive;
 
   void _getDailyReminderPreferences() async {
     _isDailyReminderActive = await preferencesHelper.isDailyReminderActive;
     notifyListeners();
   }
 
-  void enableDailyNews(bool value) {
+  void enableDailyReminder(bool value) {
     preferencesHelper.setDailyReminder(value);
     _getDailyReminderPreferences();
   }
