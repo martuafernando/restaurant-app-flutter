@@ -10,7 +10,7 @@ class RestaurantDetailProvider extends ChangeNotifier {
   RestaurantDetailProvider({required this.apiService});
 
   late RestaurantDetailResponse _restaurantDetail;
-  late ResultState _state;
+  late ResultState _state = ResultState.noData;
   String _message = '';
 
   String get message => _message;
@@ -21,21 +21,27 @@ class RestaurantDetailProvider extends ChangeNotifier {
 
   Future<dynamic> fetchDetailRestaurant(String? restaurantId) async {
     try {
-      _state = ResultState.loading;
-      
+      Future.microtask(() {
+        _state = ResultState.loading;
+        notifyListeners();
+      });
+
       if (restaurantId == null) {
         throw Exception('Cannot connect to server');
       }
 
       final restaurant = await apiService.getRestaurantDetail(restaurantId);
 
-      _state = ResultState.hasData;
-      notifyListeners();
+      Future.microtask(() {
+        _state = ResultState.hasData;
+        notifyListeners();
+      });
       return _restaurantDetail = restaurant;
-
     } catch (e) {
-      _state = ResultState.error;
-      notifyListeners();
+      Future.microtask(() {
+        _state = ResultState.error;
+        notifyListeners();
+      });
       return _message = 'Error --> $e';
     }
   }

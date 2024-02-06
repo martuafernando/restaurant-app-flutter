@@ -39,13 +39,13 @@ class FavoriteRestaurantsPage extends StatelessWidget {
               return CardRestaurant(restaurant: provider.bookmarks[index]);
             },
           );
-        } else {
-          return Center(
+        }
+
+        return Center(
             child: Material(
               child: Text(provider.message),
             ),
           );
-        }
       },
     );
   }

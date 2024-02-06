@@ -60,12 +60,12 @@ class CardRestaurant extends StatelessWidget {
             ),
             trailing: isBookmarked
                 ? IconButton(
-                    icon: const Icon(Icons.bookmark),
+                    icon: const Icon(Icons.favorite),
                     color: Theme.of(context).colorScheme.secondary,
                     onPressed: () => provider.removeFavorite(restaurant.id),
                   )
                 : IconButton(
-                    icon: const Icon(Icons.bookmark_border),
+                    icon: const Icon(Icons.favorite_border),
                     color: Theme.of(context).colorScheme.secondary,
                     onPressed: () => provider.addFavorite(restaurant),
                   ),
