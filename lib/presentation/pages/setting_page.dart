@@ -38,7 +38,7 @@ class SettingsPage extends StatelessWidget {
           children: [
             Consumer<SchedulingProvider>(builder: (context, scheduled, _) {
               return ListTile(
-                title: const Text('Scheduling News'),
+                title: const Text('Scheduling Restaurant'),
                 trailing: Switch.adaptive(
                   value: provider.isDailyReminderActive,
                   onChanged: (value) async {

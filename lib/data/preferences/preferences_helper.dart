@@ -5,7 +5,7 @@ class PreferencesHelper {
 
   PreferencesHelper({required this.sharedPreferences});
 
-  static const dailyReminder = 'DAILY_NEWS';
+  static const dailyReminder = 'DAILY_RESTAURANT';
 
   Future<bool> get isDailyReminderActive async {
     final prefs = await sharedPreferences;

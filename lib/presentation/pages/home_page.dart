@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:restaurant_app/common/styles.dart';
+import 'package:restaurant_app/presentation/pages/favorite_restaurants_page.dart';
 import 'package:restaurant_app/presentation/pages/restaurant_detail_page.dart';
 import 'package:restaurant_app/presentation/pages/restaurant_list_page.dart';
 import 'package:restaurant_app/presentation/pages/setting_page.dart';
@@ -28,13 +29,13 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _listWidget = [
     const RestaurantListPage(),
-    const RestaurantListPage(),
+    const FavoriteRestaurantsPage(),
     const SettingsPage(),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavBarItems = [
     BottomNavigationBarItem(
-      icon: Icon(Platform.isIOS ? CupertinoIcons.news : Icons.public),
+      icon: Icon(Platform.isIOS ? CupertinoIcons.home : Icons.home),
       label: _homeText,
     ),
     BottomNavigationBarItem(

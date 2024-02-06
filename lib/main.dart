@@ -7,11 +7,13 @@ import 'package:provider/provider.dart';
 import 'package:restaurant_app/common/styles.dart';
 import 'package:restaurant_app/data/api/api_service.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:restaurant_app/data/db/database_helper.dart';
 import 'package:restaurant_app/data/preferences/preferences_helper.dart';
 import 'package:restaurant_app/presentation/pages/home_page.dart';
 import 'package:restaurant_app/presentation/pages/restaurant_detail_page.dart';
 import 'package:restaurant_app/presentation/pages/restaurant_list_page.dart';
 import 'package:restaurant_app/presentation/pages/restaurant_search_page.dart';
+import 'package:restaurant_app/provider/database_provider.dart';
 import 'package:restaurant_app/provider/preference_provider.dart';
 import 'package:restaurant_app/provider/restaurant_detail_provider.dart';
 import 'package:restaurant_app/provider/restaurant_list_provider.dart';
@@ -67,6 +69,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<SchedulingProvider>(
           create: (_) => SchedulingProvider(),
+        ),
+        ChangeNotifierProvider<DatabaseProvider>(
+          create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
         ),
       ],
       child: _template(),
