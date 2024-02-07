@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:restaurant_app/common/navigation.dart';
@@ -34,16 +33,13 @@ class NotificationHelper {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse:
             (NotificationResponse response) async {
-      if (response.payload != null) {
-        log('notification payload: ${response.payload}');
-      }
       selectNotificationSubject.add(response.payload ?? 'empty payload');
     });
   }
 
   Future<void> showNotification(
       FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
-      RestaurantListResponse restaurants) async {
+      RestaurantOverview restaurant) async {
     var channelId = "1";
     var channelName = "channel_01";
     var channelDescription = "dicoding restaurant channel";
@@ -62,18 +58,18 @@ class NotificationHelper {
         iOS: iOSPlatformChannelSpecifics);
 
     var titleNotification = "<b>Restaurant Reminder</b>";
-    var titleRestaurant = restaurants.restaurants[0].name;
+    var titleRestaurant = restaurant.name;
 
     await flutterLocalNotificationsPlugin.show(
         0, titleNotification, titleRestaurant, platformChannelSpecifics,
-        payload: json.encode(restaurants.toJson()));
+        payload: json.encode(restaurant.toJson()));
   }
 
   void configureSelectNotificationSubject(String route) {
     selectNotificationSubject.stream.listen(
       (String payload) async {
-        var data = RestaurantListResponse.fromJson(json.decode(payload));
-        var restaurant = data.restaurants[0];
+        var data = RestaurantOverview.fromJson(json.decode(payload));
+        var restaurant = data;
         Navigation.intentWithData(route, restaurant);
       },
     );
