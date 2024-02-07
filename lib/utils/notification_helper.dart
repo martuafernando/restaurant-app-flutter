@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:restaurant_app/common/navigation.dart';
 import 'package:restaurant_app/data/model/response/restaurant_list.dart';
 import 'package:rxdart/subjects.dart';
@@ -77,4 +78,15 @@ class NotificationHelper {
       },
     );
   }
+
+  Future<void> requestNotificationPermissions() async {
+  final PermissionStatus status = await Permission.notification.request();
+
+  if (status.isDenied) {
+    await openAppSettings();
+
+  } else if (status.isPermanentlyDenied) {
+    await openAppSettings();
+  }
+}
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/presentation/pages/home_page.dart';
 import 'package:restaurant_app/presentation/pages/restaurant_search_page.dart';
 import 'package:restaurant_app/presentation/widgets/card_restaurant.dart';
 import 'package:restaurant_app/presentation/widgets/platform_widget.dart';
@@ -42,7 +43,7 @@ class RestaurantListPage extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Navigator.popAndPushNamed(
-                    context, RestaurantListPage.routeName);
+                    context, HomePage.routeName);
               },
               child: const Text('Refresh'),
             ),
